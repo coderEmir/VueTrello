@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "outDir": "./dist",
+        "module": "commonjs",
+        "target": "es2016",
+        "sourceMap": true,
+        // 隐式类型
+        "noImplicitAny": true,
+        // 空值检查
+        "strictNullChecks": true,
+        "allowJs": true,
+        "resolveJsonModule": true,
+        "esModuleInterop": true,
+        //处理默认导出
+        "allowSyntheticDefaultImports": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+    },
+    "include": [
+        // 配置涵盖范围：目录与文件
+        "./src/**/*"
+    ]
+}
