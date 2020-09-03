@@ -1,5 +1,3 @@
-import { type } from "os";
-
 const configs = {
     development: {
         server: {
@@ -22,6 +20,8 @@ const configs = {
 };
 // type configKeys = 'development' | 'test' | 'production'
 type configKeys = keyof typeof configs
+console.log(typeof configs);
+
 const NODE_ENV = process.env.NODE_ENV as configKeys || 'development'
 
 export default configs[NODE_ENV];

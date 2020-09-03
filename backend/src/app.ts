@@ -4,6 +4,7 @@ import Koa from 'koa'
 import {bootstrapControllers, Params} from 'koa-ts-controllers'
 import Router from 'koa-router'
 import path from 'path';
+import KoaBodyparser from 'koa-bodyparser';
 
 const app = new Koa();
 const router = new Router();
@@ -21,11 +22,13 @@ const router = new Router();
             dangote: true // great for custom, business client specific endpoint versions
         },
         controllers: [
-            path.resolve(__dirname, '/controllers/**/*')
-            ],
+                path.resolve(__dirname, './controllers/**/*')
+        ],
     });
 
+    app.use(KoaBodyparser());
     app.use(router.routes());
+    app.use(router.allowedMethods());
 
     app.listen(configs.server.port, configs.server.host, () => {
         console.log(`服务已启动：http://${configs.server.host}:${configs.server.port}`);
