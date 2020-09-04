@@ -1,10 +1,12 @@
 import { Controller, Params, Query, Post, Body, Header, Get } from "koa-ts-controllers";
-import {IsNumberString} from 'class-validator'
+import {IsNumberString, isNumberString } from 'class-validator'
+
+import Boom from '@hapi/boom';
 
 class getNewsQuery {
     
-    @IsNumberString()
-    page: number
+    @IsNumberString(undefined,{message:"page必须是纯数字的字符串"})
+    page: string
 }
 
 
@@ -12,6 +14,8 @@ class getNewsQuery {
 @Controller("/test")
 class TestControllers {
     
+    
+
     @Get("/hello")
     async hello() {
         return "hello"
@@ -71,7 +75,12 @@ class TestControllers {
     async getNews (
         @Query() q : getNewsQuery
     ) {
-         
+        console.log(typeof q.page);
+        let page = parseInt(q.page)
+        if (page >= 10 || page < 0) {
+            throw Boom.notFound("没有更多新闻了")
+        }
+        return JSON.stringify(q)
     }
 }
 

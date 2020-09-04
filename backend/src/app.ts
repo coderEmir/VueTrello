@@ -5,8 +5,7 @@ import {bootstrapControllers, Params} from 'koa-ts-controllers'
 import Router from 'koa-router'
 import path from 'path';
 import KoaBodyparser from 'koa-bodyparser';
-import { error } from 'console';
-
+import Boom from '@hapi/boom';
 const app = new Koa();
 const router = new Router();
 
@@ -34,7 +33,8 @@ const router = new Router();
                 error: "server error",
                 message: "An internal server error occurred."
             }
-            
+            // err存在output字段时，内部message可以自定义
+            // 例：@IsNumberString(undefined,{message:"page必须是纯数字"})
             if (err.output) {
                 status = err.output.statusCode
                 body = {...err.output.payload}
@@ -46,7 +46,10 @@ const router = new Router();
             context.body = body
         }
     });
-
+    // 处理路由不匹配
+    // router.all('/*',async ctx => {
+    //     throw Boom.notFound('该页面不存在')
+    // })
     app.use(KoaBodyparser());
     app.use(router.routes());
     app.use(router.allowedMethods());
