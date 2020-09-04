@@ -1,6 +1,12 @@
-import { Controller, Params, Query, Post, Body, Header } from "koa-ts-controllers";
+import { Controller, Params, Query, Post, Body, Header, Get } from "koa-ts-controllers";
+import {IsNumberString} from 'class-validator'
 
-import {Get} from 'koa-ts-controllers'
+class getNewsQuery {
+    
+    @IsNumberString()
+    page: number
+}
+
 
 // 页面根路由
 @Controller("/test")
@@ -48,4 +54,31 @@ class TestControllers {
         console.log("header",header);
         return `当前提交的数据：${JSON.stringify(body)},请求头信息：${header}`
     }
+
+    // 路由parmas合法性 
+    // 正则检验是否为数字
+    // @Get("/userId/:id(\\d+)")
+    // async getUserId(
+    //     @Params('id') id : number 
+    // ) {
+    //     return '当前用户的ID是：'+ id
+    // }
+
+    // query、body合法性
+    // 安装 class-validator（安装koa-ts-controllers时必须安装的库） 统一处理
+    // 通过类来定义要验证的数据
+    @Get("/news")
+    async getNews (
+        @Query() q : getNewsQuery
+    ) {
+         
+    }
 }
+
+// 请求响应
+// 响应码
+// 成功响应200、201
+// 失败响应  
+// 服务器错误 500 => 请求参数错误等
+// 业务逻辑错误 422、401、403 => 用户无权限等
+// 请求路由不存在 404 => 断网或请求路由不存在

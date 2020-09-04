@@ -5,6 +5,7 @@ import {bootstrapControllers, Params} from 'koa-ts-controllers'
 import Router from 'koa-router'
 import path from 'path';
 import KoaBodyparser from 'koa-bodyparser';
+import { error } from 'console';
 
 const app = new Koa();
 const router = new Router();
@@ -24,6 +25,26 @@ const router = new Router();
         controllers: [
                 path.resolve(__dirname, './controllers/**/*')
         ],
+        // 错误捕获与处理(统一处理)
+        errorHandler: async (err:any ,context: any) =>{
+            
+            let status = 500
+            let body: any = {
+                statusCode : status,
+                error: "server error",
+                message: "An internal server error occurred."
+            }
+            
+            if (err.output) {
+                status = err.output.statusCode
+                body = {...err.output.payload}
+                if (err.data) {
+                    body.content = err.data
+                }
+            }
+            context.status = status
+            context.body = body
+        }
     });
 
     app.use(KoaBodyparser());
