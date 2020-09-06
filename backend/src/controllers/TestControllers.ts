@@ -1,7 +1,9 @@
-import { Controller, Params, Query, Post, Body, Header, Get } from "koa-ts-controllers";
+import { Controller, Params, Query, Post, Body, Header, Get, Ctx, Flow } from "koa-ts-controllers";
 import {IsNumberString, isNumberString } from 'class-validator'
 
 import Boom from '@hapi/boom';
+import { Context } from "koa";
+import authorization from "../middlewares/authorization";
 
 class getNewsQuery {
     
@@ -12,18 +14,21 @@ class getNewsQuery {
 
 // 页面根路由
 @Controller("/test")
+
+// @Flow修饰类，该类所有接口都需要授权
+// @Flow([authorization])
 class TestControllers {
-    
-    
 
     @Get("/hello")
     async hello() {
+        console.log("访问了hello接口");
+        
         return "hello"
     }
     
     // 获取动态路由参数 parmas
     // @Get("/user/:name") 
-    // // 方式一：
+    // 方式一：
     // async getUser(
     //     @Params('name') name : String) {
         
@@ -71,16 +76,29 @@ class TestControllers {
     // query、body合法性
     // 安装 class-validator（安装koa-ts-controllers时必须安装的库） 统一处理
     // 通过类来定义要验证的数据
+    // @Post("/news")
     @Get("/news")
     async getNews (
+        @Ctx() ctx : Context,
         @Query() q : getNewsQuery
     ) {
+        // 注意！ctx.status = 200  必须要在函数有返回时才能生效
+        ctx.status = 200    
         console.log(typeof q.page);
         let page = parseInt(q.page)
         if (page >= 10 || page < 0) {
+            
             throw Boom.notFound("没有更多新闻了")
         }
         return JSON.stringify(q)
+    }
+
+    @Get("/author")
+    @Flow([authorization])
+    async author (
+        @Ctx() ctx : Context
+    ){
+        return "授权成功"
     }
 }
 

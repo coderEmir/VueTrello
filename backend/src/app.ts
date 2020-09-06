@@ -1,21 +1,41 @@
-import configs from './configs'
-import Koa from 'koa'
+import Koa ,{ Context, Next }from 'koa'
 // 不会生成路由，会把生成的函数绑定到指定路由，提供了绑定路由方式，和类注册的方式。
 import {bootstrapControllers, Params} from 'koa-ts-controllers'
 import Router from 'koa-router'
 import path from 'path';
 import KoaBodyparser from 'koa-bodyparser';
+
+import configs from './configs/index';
+
+import { Sequelize } from 'sequelize-typescript'
+import jwt from 'jsonwebtoken';
+
 import Boom from '@hapi/boom';
-const app = new Koa();
-const router = new Router();
 
 // 注册路由
 (async ()=> {
+
+    const app = new Koa();
+    const router = new Router();
     
+    // 连接数据库
+    const sequelize = new Sequelize({
+        ...configs.database,
+        models: [__dirname + '/models/**/*']
+    })
+    
+    app.use(async (ctx: Context, next: Next)=> {
+        let token = ctx.headers['authorization']
+        
+        if (token) {
+            ctx.userInfo = jwt.verify(token,configs.jwt.privateKey) as UserInfo
+        }
+        await next()
+    })
+
     await bootstrapControllers(app,{
         router,
         basePath:"/api",
-        // versions:[1],
         versions: {
             1: 'This version is deprecated and will soon be removed. Consider migrating to version 2 ASAP',
             2: true,
@@ -46,10 +66,12 @@ const router = new Router();
             context.body = body
         }
     });
+
     // 处理路由不匹配
     // router.all('/*',async ctx => {
     //     throw Boom.notFound('该页面不存在')
     // })
+
     app.use(KoaBodyparser());
     app.use(router.routes());
     app.use(router.allowedMethods());
