@@ -31,7 +31,7 @@ export class UserController {
             where: {name}
         })
         if (!userModel) {
-            throw Boom.forbidden("用户不存在")
+            throw Boom.notFound("用户不存在")
         }
         if (userModel.password !== md5Pwd) {
             throw Boom.forbidden("密码错误")
