@@ -16,7 +16,7 @@ mysql.server stop
 
 cd backend
 
-yarn serve
+yarn run dev
 
 ### 前端启动命令
 
