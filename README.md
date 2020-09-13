@@ -20,7 +20,7 @@ yarn run dev
 
 ### 前端启动命令
 
-cd frontend
+cd frontend/vueapp
 
 yarn serve
 
