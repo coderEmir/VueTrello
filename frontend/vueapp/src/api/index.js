@@ -22,3 +22,12 @@ export const register = data => {
         data
     })
 }
+
+export const login = data => {
+    console.log("login", data);
+    return axios({
+        method: 'post',
+        url: '/user/login',
+        data
+    })
+}

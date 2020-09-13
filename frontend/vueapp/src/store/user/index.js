@@ -1,4 +1,4 @@
-import { register } from '@/api'
+import { register, login } from '@/api'
 
 const state = {
     // 类别数据 表格 树结构
@@ -12,6 +12,9 @@ const actions = {
      * */ 
     register: (state, data) => {
         return register(data);
+    },
+    login: (state, data) => {
+        return login(data);
     },
 }
 const mutations = {
