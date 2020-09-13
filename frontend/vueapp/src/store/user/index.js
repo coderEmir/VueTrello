@@ -1,8 +1,8 @@
 import { register, login } from '@/api'
 
 const state = {
-    // 类别数据 表格 树结构
-    classTreeData: [],
+    // 用户信息
+    userInfo: {}
 }
 const actions = {
     // 必须写成对象
@@ -13,12 +13,22 @@ const actions = {
     register: (state, data) => {
         return register(data);
     },
-    login: (state, data) => {
-        return login(data);
+    login: async (state, data) => {
+        
+        let req = await login(data)
+        
+        state.commit("userInfo", { ...req.data.data, authorization : req.headers.authorization})
+        return req                        
     },
 }
 const mutations = {
-    
+    userInfo: (state, userInfo)=> {
+        state.userInfo = userInfo
+        localStorage.setItem("user", JSON.stringify(userInfo))
+    },
+    initUserInfo: state => {
+        state.userInfo = JSON.parse(localStorage.getItem("user"))   
+    }
 }
 export default {
     namespaced: true,
