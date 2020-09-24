@@ -1,5 +1,5 @@
 # 仿写trello
-
+> 启动后台服务之前，务必保证数据库已启动
 ### 启动数据库命令
 
 mysql.server start
@@ -8,7 +8,7 @@ mysql.server start
 
 mysql.server restart
 
-### 停止数据命令
+### 停止数据库命令
 
 mysql.server stop
 
@@ -16,11 +16,11 @@ mysql.server stop
 
 cd backend
 
-yarn serve
+yarn run dev
 
 ### 前端启动命令
 
-cd frontend
+cd frontend/vueapp
 
 yarn serve
 
