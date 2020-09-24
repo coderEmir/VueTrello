@@ -6,8 +6,10 @@ axios.defaults.baseURL = process.env.VUE_APP_SERVER_API_PATH;
 axios.interceptors.request.use(configs=>{
     // 配置请求头
     try {
-        let { authorization } = JSON.parse(localStorage.getItem("user"))        
-        configs.headers.common.authorization = authorization
+        let userInfo = JSON.parse(localStorage.getItem("user"))        
+        if (userInfo && userInfo.authorization) {
+            configs.headers.common.authorization = userInfo.authorization
+        }
         return configs
     }catch(e){
         console.log(e);
@@ -15,7 +17,6 @@ axios.interceptors.request.use(configs=>{
 })
 
 axios.interceptors.response.use(response => {
-    console.log("response", response);
     return response
 }, error => {
     let { message, errorDetails } = error.response.data;

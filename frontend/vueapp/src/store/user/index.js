@@ -20,6 +20,9 @@ const actions = {
         state.commit("userInfo", { ...req.data.data, authorization : req.headers.authorization})
         return req                        
     },
+    logout: async ({commit}) => {
+        commit("removeUserInfo")
+    }
 }
 const mutations = {
     userInfo: (state, userInfo)=> {
@@ -28,6 +31,10 @@ const mutations = {
     },
     initUserInfo: state => {
         state.userInfo = JSON.parse(localStorage.getItem("user"))   
+    },
+    removeUserInfo: state => {
+        state.userInfo = undefined
+        localStorage.removeItem("user")
     }
 }
 export default {

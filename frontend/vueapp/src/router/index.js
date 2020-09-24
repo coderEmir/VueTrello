@@ -62,7 +62,7 @@ store.commit('user/initUserInfo')
 
 router.beforeEach((to, from, next) => {
   // 如果需要鉴权，验证用户信息，不通过，跳转登录界面
-  console.log(to.metched);
+  
   // 是否需要鉴权
   let requiresAuth = to.matched.some(matched => matched.meta.requiresAuth)
   // 用户信息是否为空

@@ -24,7 +24,7 @@
           <div>
             <input type="submit" class="btn btn-success" value="登录" @submit.prevent="loginSubmit"/>
             <span class="signin-signup-separator">或者</span>
-            <input type="button" class="btn" value="注册" />
+            <input type="button" class="btn" value="注册" @click="pushToRegister" />
           </div>
         </form>
       </div>
@@ -44,13 +44,15 @@ export default {
         }
     },
     methods: {
+      pushToRegister () {
+        this.$router.push({name: "Register"})
+      },
         async loginSubmit() {
             if (this.user.name.trim() === "" || this.user.password.trim() === "") {
                 this.$message.error("用户名或密码不能为空")
                 return;
             }
             try {
-                console.log("loginSubmit");
                 await this.$store.dispatch('user/login', {...this.user})
                 this.$message.success("登录成功！")
                 this.$router.push({name: "Home"})
