@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import user from './user';
-
+import board from './board'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -12,6 +12,7 @@ export default new Vuex.Store({
   },
   modules: {
     // 将仓库划分小的模块
-    user
+    user,
+    board
   }
 })

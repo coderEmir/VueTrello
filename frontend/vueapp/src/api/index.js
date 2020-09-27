@@ -26,6 +26,7 @@ axios.interceptors.response.use(response => {
     TMessage.error(message);
     throw error
 },)
+// user
 // 注册
 export const register = data => {
 
@@ -40,6 +41,23 @@ export const login = data => {
     return axios({
         method: 'post',
         url: '/user/login',
+        data
+    })
+}
+
+// board
+// 获取所有面板
+export const allBoards = () => {
+    return axios({
+        method: 'get',
+        url: '/board/getBoards'
+    })
+}
+
+export const addBoard = data => {
+    return axios({
+        method: 'post',
+        url: '/board',
         data
     })
 }
