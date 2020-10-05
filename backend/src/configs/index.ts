@@ -1,51 +1,62 @@
-import databaseConfig from './database.json'
+import databaseConfig from './database.json';
+import path from 'path';
 
-type Dialect = 'mysql' | 'postgres' | 'sqlite' | 'mariadb' | 'mssql';
-
-interface MyDataBaseConfig {
-    
-    username: string,
-    password: string,
-    database: string,
-    host: string,
-    dialect: Dialect,
-    timezone: string
+interface IDatabaseConfig {
+    username: string;
+    password: string;
+    database: string;
+    host: string;
+    dialect: 'mysql' | 'postgres' | 'sqlite' | 'mariadb' | 'mssql' | 'mariadb';
+    timezone: string;
 }
+
 const configs = {
     development: {
         server: {
-            host: "localhost",
+            host: 'localhost',
             port: 8080
         },
-        database: databaseConfig.development as MyDataBaseConfig,
+        database: databaseConfig.development as IDatabaseConfig,
         jwt: {
-            privateKey: "seeEmil"
+            privateKey: 'kaikeba'
+        },
+        storage: {
+            dir: path.resolve(__dirname, '../attachments'),
+            prefix: '/public/attachments'
         }
     },
     test: {
         server: {
-            host: "localhost",
+            host: 'localhost',
             port: 8080
         },
-        database: databaseConfig.development as MyDataBaseConfig,
+        database: databaseConfig.test as IDatabaseConfig,
         jwt: {
-            privateKey: "seeEmil"
+            privateKey: 'kaikeba'
+        },
+        storage: {
+            dir: path.resolve(__dirname, 'attachments'),
+            prefix: '/public/attachments'
         }
     },
     production: {
         server: {
-            host: "localhost",
+            host: 'localhost',
             port: 8080
         },
-        database: databaseConfig.development as MyDataBaseConfig,
+        database: databaseConfig.production as IDatabaseConfig,
         jwt: {
-            privateKey: "seeEmil"
+            privateKey: 'kaikeba'
+        },
+        storage: {
+            dir: path.resolve(__dirname, 'attachments'),
+            prefix: '/public/attachments'
         }
-    },
+    }
 };
-// type configKeys = 'development' | 'test' | 'production'
-type configKeys = keyof typeof configs
 
-const NODE_ENV = process.env.NODE_ENV as configKeys || 'development'
+type configKeys = keyof typeof configs;
 
-export default configs[NODE_ENV];
+const NODE_EVN = process.env.NODE_ENV as configKeys || 'development';
+
+export default configs[NODE_EVN];

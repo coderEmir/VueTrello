@@ -3,14 +3,15 @@ import Koa ,{ Context, Next }from 'koa'
 import {bootstrapControllers, Params} from 'koa-ts-controllers'
 import Router from 'koa-router'
 import path from 'path';
+import KoaBody from 'koa-body';
 import KoaBodyparser from 'koa-bodyparser';
 
 import configs from './configs/index';
 
 import { Sequelize } from 'sequelize-typescript'
 import jwt from 'jsonwebtoken';
-
-import Boom from '@hapi/boom';
+// import KoaStaticCache from 'koa-static-cache';
+import KoaStaticCache from 'koa-static-cache'
 
 // 注册路由
 (async ()=> {
@@ -18,6 +19,16 @@ import Boom from '@hapi/boom';
     const app = new Koa();
     const router = new Router();
     
+    // 静态资源代理
+    app.use(KoaStaticCache({
+
+    }))
+    // app.use(KoaStaticCache({
+    //     dir: configs.storage.dir,
+    //     prefix: configs.storage.prefix,
+    //     gzip: true,
+    //     dynamic: true
+    // }));
     // 连接数据库
     const sequelize = new Sequelize({
         ...configs.database,
@@ -26,7 +37,6 @@ import Boom from '@hapi/boom';
     
     app.use(async (ctx: Context, next: Next)=> {
         let token = ctx.headers['authorization']
-        
         if (token) {
             ctx.userInfo = jwt.verify(token,configs.jwt.privateKey) as UserInfo
         }
@@ -75,6 +85,16 @@ import Boom from '@hapi/boom';
     app.use(KoaBodyparser());
     app.use(router.routes());
     app.use(router.allowedMethods());
+
+
+    app.use(KoaBody({
+        multipart: true,
+        formidable: {
+            uploadDir: configs.storage.dir,
+            keepExtensions: true
+        }
+    }));
+    app.use(router.routes());
 
     app.listen(configs.server.port, configs.server.host, () => {
         console.log(`服务已启动：http://${configs.server.host}:${configs.server.port}`);

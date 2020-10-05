@@ -19,12 +19,10 @@ export class BoardController {
         
         let board = new BoardModel()
         board.name = name
-        board.userId = ctx.userInfo?.userId as number
-        console.log("userId",board.userId);
-        console.log("name", name);
-        await board.save()
+        board.userId = ctx.userInfo.userId
 
-        ctx.status = 200
+        await board.save()
+        ctx.status = 201
         return board
     }
     // 获取所有面板
@@ -33,11 +31,13 @@ export class BoardController {
         @Ctx() ctx: Context,
     ) {
         let where = {
-            userId: ctx.userInfo?.userId as number
+            userId: ctx.userInfo.userId
         }
+        
         let boards = await BoardModel.findAll({where})
         return boards
     }
+
     // 获取指定面板
     @Get('/:id(\\d+)') 
     async getBoard (
@@ -45,7 +45,7 @@ export class BoardController {
         @Params('id') id: number 
     ) {
         // 根据PrimaryKey查询面板是否存在
-        let board = await findBoard(id, ctx.userInfo?.userId as number)
+        let board = await findBoard(id, ctx.userInfo.userId)
         return board
     }
     // 更新面板
@@ -56,7 +56,7 @@ export class BoardController {
         @Body() body: PutUpdateBoardBody
     ) {
         // 根据PrimaryKey查询面板是否存在
-        let board = await findBoard(id, ctx.userInfo?.userId as number)
+        let board = await findBoard(id, ctx.userInfo.userId)
         return board
     }
     // 删除面板
@@ -65,7 +65,7 @@ export class BoardController {
         @Ctx() ctx: Context,
         @Params('id') id: number
     ) {
-        let board = await findBoard(id, ctx.userInfo?.userId as number)
+        let board = await findBoard(id, ctx.userInfo.userId)
         // 删除数据方法=>destroy
         await board.destroy()
         ctx.status = 204

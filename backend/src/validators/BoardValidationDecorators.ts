@@ -25,7 +25,8 @@ export async function findBoard(id: number, userId: number): Promise<BoardModel>
     if (!board) {
         throw Boom.notFound("不存在改面板")
     }
-    if (board.userId !== userId) {
+    
+    if (parseInt(board.dataValues.userId) !== userId) {
         throw Boom.forbidden("无访问该面板的权限")
     }
     return board

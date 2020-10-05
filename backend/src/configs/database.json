@@ -4,20 +4,23 @@
         "dialect": "mysql",
         "username": "root",
         "password": "xymspace",
-        "database": "trelloDB"
+        "database": "trelloDB",
+        "timezone": "+08:00"
     },
     "test": {
         "host": "127.0.0.1",
         "dialect": "mysql",
         "username": "root",
         "password": "xymspace",
-        "database": "trelloDB"
+        "database": "trelloDB",
+        "timezone": "+08:00"
     },
     "production": {
         "host": "127.0.0.1",
         "dialect": "mysql",
         "username": "root",
         "password": "xymspace",
-        "database": "trelloDB"
+        "database": "trelloDB",
+        "timezone": "+08:00"
     }
 }
