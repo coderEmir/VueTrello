@@ -11,17 +11,9 @@
                 <li 
                     class="board-item"
                     v-for="item in boards" :key="item.id"
+                    @click="showBoardDetail(item)"
                 >
                     <span class="title">{{item.name}}</span>
-                </li>
-                <li class="board-item">
-                    <span class="title">test</span>
-                </li>
-                <li  class="board-item">
-                    <span class="title">共同努力吧！</span>
-                </li>
-                <li  class="board-item">
-                    <span class="title">Welcome Board</span>
                 </li>
                 <li  class="board-item create-new-board">
                     <!-- blur失去焦点时触发事件 -->
@@ -37,7 +29,7 @@ import THeader from '@/components/THeader.vue'
 import { mapState } from 'vuex'
 export default {
     created() {
-        if (this.boards === null) {
+        if (this.isInitStore) {
             // dispatch 一个 action（要注明命名空间和action名称），获取boards
             this.$store.dispatch('board/getBoards')
         }
@@ -47,13 +39,21 @@ export default {
     },
     computed: {
         ...mapState("board",{
-            boards: state => state.boards
+            boards: state => state.boards,
+            isInitStore: state => state.isInitStore
         })
     },
     methods: {
         newBoard() {
             let value = this.$refs.newBoardName.value
-            this.$store.dispatch('board/addBoard', value)
+            if (value.replace(/[\s\n\t]+$/g, "").length > 0) {
+                this.$store.dispatch('board/addBoard', value)    
+                this.$message.success('面板创建成功');
+            }
+            this.$refs.newBoardName.value = ""
+        },
+        showBoardDetail(item) {
+            this.$router.push('board/'+item.id)
         }
     }
 }

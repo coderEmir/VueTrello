@@ -453,43 +453,49 @@ home
 board
 */
 #board {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
+    user-select: none;
+    white-space: nowrap;
+    margin-bottom: 8px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 8px;
+    position: absolute;
+    /* padding-top: 50px; */
+    top: 72.4px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgb(0, 121, 191);
 }
 #board main {
     display: flex;
     flex-direction: column;
     position: relative;
     padding: 10px;
-    height: 100%;
-    background-color: rgb(0, 121, 191);
+    height: 91.4vh;
 }
-#board main h2 {
+#mainBoard h2 {
     height: 32px;
-    line-height: 32px;
-    color: white;
+    line-height: 35px;
+    background-color: rgb(0, 121, 191);
 }
 
 .board {
     display: flex;
-    /*overflow-x: auto;*/
-    /*overflow-y: hidden;*/
     padding-bottom: 8px;
     position: absolute;
-    top: 60px;
+    top: 10px;
     right: 0;
     bottom: 0;
     left: 0;
 }
 .list-wrap {
     position: relative;
-    display: inline-block;
     margin: 0 4px;
+    padding-right: 4px;
     box-sizing: border-box;
     vertical-align: top;
-    width: 300px;
+    width: 260px;
     border-radius: 3px;
 }
 .list {
@@ -500,12 +506,14 @@ board
     max-height: 100%;
     background-color: #ebecf0;
     box-shadow: 10px 10px 20px rgba(9,30,66,.25);
-    border-radius:3px
+    border-radius:3px;
+    /* width: 260px; */
 }
 .list-header {
     position: relative;
     padding: 10px 36px 10px 8px;
     min-height: 20px;
+    /* width: 260px; */
 }
 .list-header .extras-menu {
     position: absolute;
@@ -513,6 +521,7 @@ board
     top: 4px;
     z-index: 1;
     cursor: pointer;
+    /* width: 260px; */
 }
 .list-header .extras-menu .icon-more {
     color: #6b778c;
@@ -587,6 +596,7 @@ board
 .list-footer {
     margin: 8px;
     display: flex;
+    width: 260px;
     justify-content: space-between;
 }
 
@@ -619,8 +629,13 @@ board
     color: #5e6c84;
 }
 
+.list-footer {
+    width: 260px;
+}
+
 .list-add-confirm {
     display: none;
+    width: 260px;
 }
 .list-add-confirm .btn {
     margin-bottom: 0;
@@ -657,11 +672,11 @@ board
 }
 
 /*添加状态切换*/
-.list-adding .list-card-add, .list-adding .list-add {
+/* .list-adding .list-card-add, .list-adding .list-add {
     display: none;
-}
-.list-adding .list-add-confirm,
-.list-adding .list-card-add-form,
+} */
+/* .list-adding .list-add-confirm, */
+/* .list-adding .list-card-add-form, */
 .no-content.list-adding .list-cards,
 .no-content.list-adding .list-footer {
     display: block;
@@ -670,6 +685,7 @@ board
 /*拖拽*/
 .list-wrap.list-placeholder {
     display: none;
+    height: 0px;
 }
 .list-wrap .list-placeholder {
     position: absolute;

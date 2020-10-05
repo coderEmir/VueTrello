@@ -21,6 +21,7 @@
         <t-popup-menu :items="menuItems" @command="execute" slot="content"/>
       </t-popup>
     </div>
+    <slot/>
   </header>
 </template>
 
@@ -53,6 +54,7 @@ export default {
     
     logout() {
       this.$store.dispatch('user/logout')
+      // this.$store.dispatch('board/cleanBoardMemory')
       this.$router.push({name:"Login"})
       this.$refs.tPopup.close()
     }
@@ -64,6 +66,3 @@ export default {
         }
 };
 </script>
-
-<style lang="scss" scoped>
-</style>
