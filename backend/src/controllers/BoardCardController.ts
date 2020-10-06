@@ -50,7 +50,7 @@ export class BoardListCardController {
         boarListCard.userId = ctx.userInfo.userId;
         boarListCard.boardListId = boardListId;
         boarListCard.name = name;
-        boarListCard.description = boarListCard.description || '';
+        boarListCard.description = description || '';
 
         await boarListCard.save();
 
@@ -184,25 +184,26 @@ export class BoardListCardController {
         @Ctx() ctx: Context,
         @Body() body: any
     ) {
-
-        let { boardListCardId } = body;
-
-        let card = await getAndValidateBoardListCard(boardListCardId, ctx.userInfo.userId);
-
-        //ctx.request.files.attachment;
+        
+        let { boardListCardId} = body;
+        // console.log("ctx=====", ctx.request);
+        // console.log("ctx=====", ctx.res);
         if (!ctx.request.files || !ctx.request.files.attachment) {
             throw Boom.badData('缺少附件');
         }
 
         let file = ctx.request.files.attachment;
-        // console.log(file);
-
+        console.log("file====", ctx.request.files);
+        console.log("boardListCardId====", boardListCardId);
+        
         let attachment = new AttachmentModel();
         attachment.userId = ctx.userInfo.userId;
         attachment.originName = file.name;
         attachment.name = file.path.split('/').pop() as string;
         attachment.type = file.type;
         attachment.size = file.size;
+        console.log(attachment);
+        
         await attachment.save();
 
         let cardAttachment = new CardAttachmentModel();

@@ -1,5 +1,5 @@
 <template>
-    <router-link :to="{name: 'Card', params:{listId: data.boardListId, cardId: data.id}}" class="list-card" v-if="data">
+    <router-link :to="{name: 'Card', params:{listId: data.boardListId, cardId: data.id ,listName:listName}}" class="list-card" v-if="data">
         <div v-if="data.coverPath" class="list-card-cover"
              :style="'background-image: url('+ data.coverPath +');'"></div>
         <div class="list-card-title">{{data.name}}</div>
@@ -26,7 +26,11 @@
         props: {
             data: {
                 type: Object
+            },
+            listName: {
+                type: String
             }
-        }
+        },
+        
     }
 </script>

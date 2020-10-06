@@ -17,7 +17,7 @@ function Message(data) {
         data = {
             message: data
         }
-    };
+    }
 
     // 添加关闭事件回调
     data.onClose = function () {
@@ -54,12 +54,15 @@ function Message(data) {
  */
 ['info', 'success', 'error', 'warning'].forEach(type => {
     Message[type] = function (data) {
-        if (typeof data === 'string') {
-            data = {
-                message: data
+        if (data) {
+            if (typeof data === 'string') {
+                data = {
+                    message: data
+                }
             }
-        };
-        data.type = type;
+            data.type = type || "error";
+        }
+        
         return Message(data);
     };
 });

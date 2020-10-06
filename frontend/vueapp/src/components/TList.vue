@@ -11,7 +11,7 @@
           </div>
         </div>
         <div class="list-cards" v-if="cards">
-          <t-card v-for="card of cards" :data="card" :key="card.id"></t-card>
+          <t-card v-for="card of cards" :data="card" :key="card.id" :listName="listData.name"/>
 
           <div class="list-card-add-form" ref="addCardForm">
             <textarea
@@ -74,6 +74,7 @@ export default {
   },
 
   mounted() {
+    this.hideListCardAddForm()
     this.$refs.listHeader.addEventListener("mousedown", this.dragDown);
     document.addEventListener("mousemove", this.dragMove);
     document.addEventListener("mouseup", this.dragUp);
@@ -190,7 +191,7 @@ export default {
             boardListId: this.listData.id,
             name: value,
           });
-
+          this.$refs.newListName.value = ""
           this.$message.success("添加成功");
         
       } else {

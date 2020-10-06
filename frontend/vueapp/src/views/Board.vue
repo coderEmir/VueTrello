@@ -117,7 +117,7 @@ export default {
             let el = e.component.$el;
             let board = el.parentNode;
             let lists = [...board.querySelectorAll('.board-list')];
-            let currentIndex = lists.findIndex( list => list === el );
+            let currentIndex = el._index;
             
             lists.forEach((list, index) => {
                 if ( index !== currentIndex ) {
@@ -147,16 +147,15 @@ export default {
             let lists = [...board.querySelectorAll('.board-list')];
             let currentIndex = lists.findIndex(list => list === el);
 
+
+            // 获取当前所在位置的上一个列表和下一个列表的order值
+            let prevOrder = this.lists[currentIndex - 1] && parseFloat( this.lists[currentIndex - 1].order );
+            let nextOrder = this.lists[currentIndex + 1] && parseFloat( this.lists[currentIndex + 1].order );
+
             // 判断一下当前这个元素是否移动了
-            // console.log(el._index, currentIndex);
+            let newOrder;
+            console.log(el._index, currentIndex);
             if (el._index !== currentIndex) {
-
-                let newOrder;
-
-                // 获取当前所在位置的上一个列表和下一个列表的order值
-                let prevOrder = this.lists[currentIndex - 1] && parseFloat( this.lists[currentIndex - 1].order );
-                let nextOrder = this.lists[currentIndex + 1] && parseFloat( this.lists[currentIndex + 1].order );
-
                 if (currentIndex === 0) {
                     newOrder = nextOrder / 2;
                 } else if (currentIndex === lists.length - 1) {
@@ -164,7 +163,6 @@ export default {
                 } else {
                     newOrder = prevOrder + (nextOrder - prevOrder) / 2;
                 }
-                console.log(newOrder);
                 await this.$store.dispatch('list/editList', {
                     boardId: this.board.id,
                     id: e.component.listData.id,

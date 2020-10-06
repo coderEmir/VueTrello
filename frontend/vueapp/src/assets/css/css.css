@@ -672,11 +672,14 @@ board
 }
 
 /*添加状态切换*/
-/* .list-adding .list-card-add, .list-adding .list-add {
+.list-adding .list-card-add, .list-adding .list-add {
+    display: none;
+}
+/* .list-adding {
     display: none;
 } */
-/* .list-adding .list-add-confirm, */
-/* .list-adding .list-card-add-form, */
+.list-adding .list-add-confirm,
+.list-adding .list-card-add-form,
 .no-content.list-adding .list-cards,
 .no-content.list-adding .list-footer {
     display: block;

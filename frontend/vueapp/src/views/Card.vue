@@ -11,11 +11,11 @@
           <div class="popup-title-text">
             <textarea class="form-field-input">平台规划</textarea>
           </div>
-          <div class="popup-title-detail">在列表 Done 中</div>
+          <div class="popup-title-detail">在列表 {{ currentListName }} 中</div>
         </div>
-        <a class="popup-header-close">
-          <i class="icon icon-close"></i>
-        </a>
+        <router-link class="popup-header-close" to>
+          <i class="icon icon-close" @click="$router.go(-1)"></i>
+        </router-link>
       </div>
 
       <div class="popup-content">
@@ -47,51 +47,49 @@
             </div>
           </div>
 
-          <ul class="attachments">
-            <li class="attachment">
+          <ul class="attachments" v-if="card">
+            <li
+              class="attachment"
+              v-for="attachment of card.attachments"
+              :key="attachment.id"
+            >
               <div
                 class="attachment-thumbnail"
-                style="background-image: url('https://trello-attachments.s3.amazonaws.com/5ddf961b5e861107e5f2de49/200x200/96d8fa19e335be20c102d394ef4bed71/logo.png')"
+                :style="`background-image: url(${server.staticPath}${attachment.path})`"
               ></div>
               <p class="attachment-detail">
-                <span class="attachment-thumbnail-name">
-                  <strong>icon_nav_button.png</strong>
-                </span>
+                <span class="attachment-thumbnail-name"
+                  ><strong>{{ attachment.detail.originName }}</strong></span
+                >
                 <span class="attachment-thumbnail-descriptions">
-                  <span class="datetime">2019年12月29日晚上11点04分</span>
-                  <span>-</span>
-                  <u>删除</u>
+                  <span class="datetime">
+                    {{ attachment.createdAt | dateTime }}
+                  </span>
+                  <span> - </span>
+                  <u @click="removeAttachment(attachment.id)">删除</u>
                 </span>
                 <span class="attachment-thumbnail-operation">
                   <i class="icon icon-card-cover"></i>
-                  <u>移除封面</u>
-                </span>
-              </p>
-            </li>
-            <li class="attachment">
-              <div
-                class="attachment-thumbnail"
-                style="background-image: url('https://trello-attachments.s3.amazonaws.com/5ddf961b5e861107e5f2de49/200x200/96d8fa19e335be20c102d394ef4bed71/logo.png')"
-              ></div>
-              <p class="attachment-detail">
-                <span class="attachment-thumbnail-name">
-                  <strong>icon_nav_button.png</strong>
-                </span>
-                <span class="attachment-thumbnail-descriptions">
-                  <span class="datetime">2019年12月29日晚上11点04分</span>
-                  <span>-</span>
-                  <u>删除</u>
-                </span>
-                <span class="attachment-thumbnail-operation">
-                  <i class="icon icon-card-cover"></i>
-                  <u>移除封面</u>
+                  <u
+                    v-if="attachment.isCover"
+                    @click="removeCover(attachment.id)"
+                    >移除封面</u
+                  >
+                  <u v-else @click="setCover(attachment.id)">设为封面</u>
                 </span>
               </p>
             </li>
           </ul>
-
           <div>
-            <button class="btn btn-edit">添加附件</button>
+            <button class="btn btn-edit" @click="$refs.attachment.click()">
+              添加附件
+            </button>
+            <input
+              type="file"
+              ref="attachment"
+              style="display: none"
+              @change="uploadAttachment"
+            />
           </div>
         </div>
 
@@ -106,111 +104,47 @@
             </div>
           </div>
 
-          <div class="comment-post">
+          <div class="comment-post" v-if="user">
             <div class="avatar">
-              <span>Z</span>
+              <span>{{ user.name[0].toUpperCase() }}</span>
             </div>
             <div class="comment-content-box editing">
-              <textarea class="comment-content-input" placeholder="添加评论……"></textarea>
-              <button class="btn btn-edit">保存</button>
+              <textarea
+                class="comment-content-input"
+                placeholder="添加评论……"
+                ref="content"
+              ></textarea>
+              <button class="btn btn-edit" @click="postNewComment">保存</button>
             </div>
           </div>
 
-          <ul class="comments">
-            <li class="comment">
+          <ul class="comments" v-if="comments">
+            <li
+              class="comment"
+              v-for="comment of comments.rows"
+              :key="comment.id"
+            >
               <div class="avatar">
-                <span>Z</span>
+                <span>{{ comment.user.name[0].toUpperCase() }}</span>
               </div>
               <div class="description">
                 <div class="header">
-                  <strong>zMouse</strong>
-                  <span>at</span>
-                  <i>2019年12月29日晚上11点04分</i>
+                  <strong>{{ comment.user.name }}</strong>
+                  <span> at </span>
+                  <i>{{ comment.createdAt | dateTime }}</i>
                 </div>
-                <div class="content">非常不错！！</div>
-              </div>
-            </li>
-            <li class="comment">
-              <div class="avatar">
-                <span>Z</span>
-              </div>
-              <div class="description">
-                <div class="header">
-                  <strong>zMouse</strong>
-                  <span>at</span>
-                  <i>2019年12月29日晚上11点04分</i>
+                <div class="content">
+                  {{ comment.content }}
                 </div>
-                <div class="content">非常不错！！</div>
-              </div>
-            </li>
-            <li class="comment">
-              <div class="avatar">
-                <span>Z</span>
-              </div>
-              <div class="description">
-                <div class="header">
-                  <strong>zMouse</strong>
-                  <span>at</span>
-                  <i>2019年12月29日晚上11点04分</i>
-                </div>
-                <div class="content">非常不错！！</div>
-              </div>
-            </li>
-            <li class="comment">
-              <div class="avatar">
-                <span>Z</span>
-              </div>
-              <div class="description">
-                <div class="header">
-                  <strong>zMouse</strong>
-                  <span>at</span>
-                  <i>2019年12月29日晚上11点04分</i>
-                </div>
-                <div class="content">非常不错！！</div>
-              </div>
-            </li>
-            <li class="comment">
-              <div class="avatar">
-                <span>Z</span>
-              </div>
-              <div class="description">
-                <div class="header">
-                  <strong>zMouse</strong>
-                  <span>at</span>
-                  <i>2019年12月29日晚上11点04分</i>
-                </div>
-                <div class="content">非常不错！！</div>
-              </div>
-            </li>
-            <li class="comment">
-              <div class="avatar">
-                <span>Z</span>
-              </div>
-              <div class="description">
-                <div class="header">
-                  <strong>zMouse</strong>
-                  <span>at</span>
-                  <i>2019年12月29日晚上11点04分</i>
-                </div>
-                <div class="content">非常不错！！</div>
               </div>
             </li>
           </ul>
-
           <div class="comment-pagination">
-            <div class="pagination">
-              <span>首页</span>
-              <span>上一页</span>
-              <span>...</span>
-              <span>4</span>
-              <span>5</span>
-              <span class="current-page">6</span>
-              <span>7</span>
-              <span>8</span>
-              <span>...</span>
-              <span>下一页</span>
-              <span>尾页</span>
-            </div>
+            <t-pagination
+              :pages="comments.pages"
+              :page="comments.page"
+              @changePage="changePage"
+            ></t-pagination>
           </div>
         </div>
       </div>
@@ -219,8 +153,90 @@
 </template>
 
 <script>
-export default {};
-</script>
+import dateTime from "@/filters/dateTime";
+import TPagination from "@/components/TPagination";
 
-<style lang="scss" scoped>
-</style>
+export default {
+  name: "TComment",
+  filters: {
+    dateTime,
+  },
+  components: {
+    TPagination,
+  },
+  props: ["listName"],
+  data() {
+    return {
+      comments: {},
+    };
+  },
+
+  computed: {
+    card() {
+      let data = this.$store.getters["card/getCard"](this.$route.params.cardId)
+      console.log("data========",data);
+      return data;
+    },
+    currentListName() {
+      if (this.listName) {
+        localStorage.setItem("listTitle", this.listName);
+        return this.listName;
+      }
+      return localStorage.getItem("listTitle");
+    },
+    user() {
+      console.log("route", this.$route);
+      return this.$store.state.user.userInfo;
+    },
+    server() {
+      return this.$store.state.server;
+    },
+  },
+
+  created() {
+    this.getComments();
+  },
+
+  methods: {
+    async getComments(page = 1) {
+      let rs = await this.$store.dispatch("comment/getComments", {
+        boardListCardId: this.$route.params.cardId,
+        page,
+      });
+
+      this.comments = rs.data;
+    },
+
+    async postNewComment() {
+      let { value } = this.$refs.content;
+
+      if (value.trim() !== "") {
+        await this.$store.dispatch("comment/postComment", {
+          boardListCardId: this.$route.params.cardId,
+          content: value,
+        });
+
+        this.$message.success("评论成功");
+
+        await this.getComments();
+      }
+      this.$refs.content.value = "";
+      this.$refs.content.focus();
+    },
+
+    async changePage(page) {
+      await this.getComments(page);
+    },
+    async uploadAttachment() {
+      let file = this.$refs.attachment.files[0];
+      await this.$store.dispatch("card/uploadAttachment", {
+        boardListCardId: this.card.id,
+        file,
+      });
+
+      this.$refs.attachment.value = "";
+      this.$message.success("上传成功");
+    },
+  },
+};
+</script>

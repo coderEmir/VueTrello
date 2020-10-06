@@ -21,14 +21,11 @@ import KoaStaticCache from 'koa-static-cache'
     
     // 静态资源代理
     app.use(KoaStaticCache({
-
+        dir: configs.storage.dir,
+        prefix: configs.storage.prefix,
+        gzip: true,
+        dynamic: true
     }))
-    // app.use(KoaStaticCache({
-    //     dir: configs.storage.dir,
-    //     prefix: configs.storage.prefix,
-    //     gzip: true,
-    //     dynamic: true
-    // }));
     // 连接数据库
     const sequelize = new Sequelize({
         ...configs.database,
@@ -82,9 +79,9 @@ import KoaStaticCache from 'koa-static-cache'
     //     throw Boom.notFound('该页面不存在')
     // })
 
-    app.use(KoaBodyparser());
-    app.use(router.routes());
-    app.use(router.allowedMethods());
+    // app.use(KoaBodyparser());
+    // app.use(router.routes());
+    // app.use(router.allowedMethods());
 
 
     app.use(KoaBody({

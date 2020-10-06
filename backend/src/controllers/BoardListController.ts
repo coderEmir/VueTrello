@@ -36,16 +36,16 @@ export class BoardListController {
         @Body() body: PostAddBoardListBody
     ) {
         let { boardListId, name } = body;
+        console.log("body", body);
         
         await findBoard(boardListId, ctx.userInfo.userId);
-
+        
         let maxOrderBoardList = await BoardListModel.findOne({
             where: {
                 boardListId
             },
-            order: [['order', 'dsc']]
+            order: [['order', 'desc']]
         });
-
         let boardList = new BoardListModel();
         boardList.userId = ctx.userInfo.userId;
         boardList.boardListId = boardListId;
@@ -74,8 +74,6 @@ export class BoardListController {
             },
             order: [['order', 'asc']]
         });
-        console.log(boardList);
-        
         return boardList;
     }
 

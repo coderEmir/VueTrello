@@ -3,7 +3,7 @@ import {IsNumber, IsNumberString, MaxLength, ValidateIf} from "class-validator";
 
 export class PostAddCommentBody {
 
-    @IsNumber({}, {
+    @IsNumber(undefined, {
         message: 'boardListCardId必须为数字'
     })
     boardListCardId: number;
@@ -17,13 +17,13 @@ export class PostAddCommentBody {
 
 export class GetCommentsQuery {
 
-    @IsNumberString( {
+    @IsNumberString( undefined, {
         message: 'boardListCardId必须为数字'
     })
     boardListCardId: number;
 
     @ValidateIf(o=>o.page !== undefined)
-    @IsNumberString({
+    @IsNumberString(undefined, {
         message: '分页必须是数字'
     })
     page?: number;

@@ -27,7 +27,9 @@ const routes = [
     children: [{
       path: "list/:listId(\\d+)/card/:cardId(\\d+)",
       name: "Card",
-      component: Card
+      props: route => ({ listName: route.params.listName }),
+      component: Card,
+      
     }],
     component: Board,
     meta: {

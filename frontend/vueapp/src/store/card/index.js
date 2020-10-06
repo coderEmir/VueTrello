@@ -5,13 +5,17 @@ export default {
     namespaced: true,
 
     state: {
-        cards: []
+        cards: [],
+        listTitle: ""
     },
 
     getters: {
         getCards: ({ cards }) => boardListId => cards.filter(card => card.boardListId == boardListId),
 
-        getCard: ({ cards }) => cardId => cards.find(card => card.id == cardId)
+        getCard: ({ cards }) => cardId => {
+            console.log("lists======", cards);
+            return cards.find(card => card.id == cardId)},
+        getListTitle: ({listTitle}) => () => listTitle
     },
 
     mutations: {
@@ -34,6 +38,7 @@ export default {
 
         addAttachment: (state, data) => {
             state.cards = state.cards.map(card => {
+                
                 if (card.id == data.boardListCardId) {
                     return {
                         ...card,
@@ -88,6 +93,9 @@ export default {
                 }
                 return card;
             });
+        },
+        saveListTitle: (state,data) => {
+            state.listTitle = data
         }
     },
 
@@ -102,7 +110,7 @@ export default {
 
         postCard: async ({ commit }, data) => {
             let rs = await api.postCard(data);
-
+            console.log(rs.data);
             commit('addCard', rs.data);
 
             return rs;
@@ -117,9 +125,7 @@ export default {
         },
 
         uploadAttachment: async ({ commit }, data) => {
-
             let rs = await api.uploadAttachment(data);
-
             commit('addAttachment', rs.data);
 
             return rs;
@@ -153,6 +159,10 @@ export default {
 
             return rs;
 
+        },
+        saveListTitle: ({commit},data) => {
+            let newData = data
+            commit("saveListTitle", newData)
         }
     }
 

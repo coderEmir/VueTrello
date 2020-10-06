@@ -29,7 +29,7 @@ axios.interceptors.response.use(response => {
 // user
 // 注册
 export const register = data => {
-
+    console.log("registerData=====",data);
     return axios({
         method: 'post',
         url: '/user/register',
@@ -176,6 +176,7 @@ export const getComments = params => {
 };
 // 添加评论
 export const postComment = data => {
+    
     return axios({
         method: 'post',
         url: '/comment',
