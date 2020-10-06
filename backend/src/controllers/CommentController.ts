@@ -48,14 +48,12 @@ export class CommentController {
     ) {
 
         let { boardListCardId, page } = query;
-
         let card = getAndValidateBoardListCard(boardListCardId, ctx.userInfo.userId);
-
         let where = { boardListCardId };
 
         // 查询评论总数
         let commentCount = await CommentModel.count({ where });
-
+        
         // 查询具体的评论信息
         // 每页的条数
         let limit = 2;
@@ -79,7 +77,8 @@ export class CommentController {
                 }
             ]
         });
-
+        console.log(limit,page,pages,comments);
+        
         return {
             limit,
             page,
