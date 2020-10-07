@@ -12,6 +12,9 @@ mysql.server restart
 
 mysql.server stop
 
+### 初始化数据库表
+npm run db:redo
+
 ### 后端启动命令
 
 cd backend
